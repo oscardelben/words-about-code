@@ -1,7 +1,7 @@
 # Rails Internals: Inside Active Model Attribute Methods
 
-Attribute methods is a useful class that alllows you to define dynamic
-prefixes/suffixes of your attributes:
+`AttributeMethods` is a useful class that alllows you to define dynamic
+prefixes/suffixes for your class attributes. Here's an example of what you can do with it:
 
 ``` ruby
 require 'rubygems'
@@ -33,22 +33,19 @@ class Person
 
 end
 
-p = Person.new
+p =Person.new
 p.name = "Oscar"
-p p.name_present? # true
-p p.name_contains?("Os") # true
+p.name_present? # true
+p.name_contains?("Os") # true
 p.reset_name_to_default
-p p.name_present? # false
-
-kkk
+p.name_present? # false
 ```
 
-Let's see how rails accomplishes this:
+Let's see how rails accomplishes this.
 
 ### How methods are defined
 
-There is a class named `AttributeMethodMatcher` which is used for
-storing methods. Relevant parts here:
+There is a class named `AttributeMethodMatcher` which is used behind the scenes for storing attribute matchers. Relevant parts here:
 
 ``` ruby
 class AttributeMethodMatcher
@@ -60,10 +57,8 @@ class AttributeMethodMatcher
   def initialize(options = {})
     # other code
 
-    @prefix, @suffix = options[:prefix] || '', options[:suffix]
-|| ''
-    @regex =
-/^(?:#{Regexp.escape(@prefix)})(.*)(?:#{Regexp.escape(@suffix)})$/
+    @prefix, @suffix = options[:prefix] || '', options[:suffix] || ''
+    @regex = /^(?:#{Regexp.escape(@prefix)})(.*)(?:#{Regexp.escape(@suffix)})$/
     @method_missing_target = "#{@prefix}attribute#{@suffix}"
     @method_name = "#{prefix}%s#{suffix}"
   end
@@ -84,10 +79,8 @@ end
 ```
 
 Every time you call either `attribute_method_affix` or
-`attribute_method_prefix` or `attribute_method_suffix`, behind the scene
-you create an instance of this class and store it into an array. Only
-when you call `define_attribute_methods` the magic really happens. Let's
-see what happens there:
+`attribute_method_prefix` or `attribute_method_suffix`, you create an instance of this class which is then stored into an array. It's only
+when you call `define_attribute_methods` that the methods are really defined:
 
 ``` ruby
 def define_attribute_methods(attr_names)
@@ -115,8 +108,7 @@ method_name, matcher.method_missing_target, attr_name.to_s
   attribute_method_matchers_cache.clear
 end
 
-# Removes all the previously dynamically defined methods from the
-class
+# Removes all the previously dynamically defined methods from the class
 def undefine_attribute_methods
   generated_attribute_methods.module_eval do
     instance_methods.each { |m| undef_method(m) }
@@ -124,8 +116,7 @@ def undefine_attribute_methods
   attribute_method_matchers_cache.clear
 end
 
-# Returns true if the attribute methods defined have been
-generated.
+# Returns true if the attribute methods defined have been generated.
 def generated_attribute_methods #:nodoc:
   @generated_attribute_methods ||= begin
     mod = Module.new
@@ -145,14 +136,13 @@ Pay attention to the method definition of `generated_attribute_methods`:
 end
 ```
 What's happening here is that we're creating a module, *including the
-module on our class*, and then returning the module so we can keep track
-of it, and *dynamically add methods to it*, which *will* be included to
-our class as well. Note that we can undefine those methods at any time
+module in our class*, and then returning the module so we can keep track
+of it and *dynamically add methods to it*. Note that we can undefine those methods at any time
 by calling `undefine_attribute_methods`.
 
 # See for yourself
 
-There's more happening behind the scene:
+There's more happening behind the scenes:
 
 [ActiveModel::AttributeMethods on Github](https://github.com/rails/rails/blob/5d0c1814ad624090620e907012e0eaf353468202/activemodel/lib/active_model/attribute_methods.rb)
 
