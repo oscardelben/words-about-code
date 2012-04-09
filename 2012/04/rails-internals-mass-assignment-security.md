@@ -3,7 +3,7 @@
 **IMPORTANT** This article is still a draft. It is not completed and
 the information it contains may be wrong. Please be patient.
 
-Mass assigment security has recently been the focus of a debut in the
+Mass assigment security has recently been the focus of a debate in the
 Ruby community after a fellow hacker demostrated that lots of apps
 suffer from bad defaults when protecting model attributes.
 
@@ -17,11 +17,11 @@ class User < ActiveRecord::Base
 end
 ```
 
-In this example we're protecting from a malicious assignment of the
-`role` attribute, but notice how we expose `updated_at` which is almost
-never what we want. Now, in real models most attributes are not visible
-as they're dynamically defined by `ActiveRecord` tables, so it's easier
-to get these kinds of problems.
+In this code we're protecting from a malicious assignment of the
+`role` attribute, but notice how we also expose `updated_at` which is
+probably not what we intended. Now, in the real world attributes will be
+generated automatically and so you'll be more vulnerable to these kind
+of mistakes.
 
 ### attr_accessible
 
@@ -33,18 +33,17 @@ class User < ActiveRecord::Base
   attr_accessor :name, :role, :updated_at
 
   attr_accessible :name
-  # We can also pass an admin option!
+  # We can also pass a role option!
   attr_accessible :name, :role, :updated_at, :as => 'admin'
 end
 ```
 
-Match better. Now let's see how these methods are defined inside rails.
+Match better. Now let's see how these methods are defined internally.
 
 ## ActiveModel::MassAssignmentSecurity
 
 We'll start our journey inside `ActiveModel::MassAssignmentSecurity`,
-which provides a general interface for all classes, and then we'll dig
-inside `ActiveRecord` to see an example integration.
+which provides a general interfacer
 
 ``` ruby
 def attr_protected(*args)
@@ -75,7 +74,7 @@ end
 ```
 
 `attr_protected` and `attr_accessible` are very similar. They both
-accept an optional role[s] parameter.
+accept an optional role[s] parameter for enhanced security.
 
 It's interesting to see how we can use `Array(elt)` to turn an element
 to an array, unless it's already an array:
@@ -163,8 +162,7 @@ models, and it would just call your sanitizer of choice (default `logger`,
 but you can pass `strict` to raise an error instead), with your
 authorizer.
 
-For completeness, I'm pasting the sanitizer and authorizer classes for
-those interested.
+For completeness, I'm pasting the content of the sanitizer and authorizer classes.
 
 ``` ruby
 module ActiveModel
@@ -271,3 +269,58 @@ module ActiveModel
   end
 end
 ```
+
+### How ActiveRecord Uses Mass Assignment to protect attributes
+
+ActiveRecord includes the Mass Assignment module to provide
+`attr_accessible` and `attr_protected` methods for your models.
+
+Beside that, it redefines `attributes_protected_by_default` to protect
+the primary_key and Inheritance_column from mass assignment:
+
+```ruby
+def attributes_protected_by_default
+  default = [ primary_key, inheritance_column ]
+  default << 'id' unless primary_key.eql? 'id'
+  default
+end
+```
+
+Also worth our attention is that the `attributes=` method of
+ActiveRecord calls `assign_attributes` which you could also call
+explicitly to skip mass assignment validation:
+
+``` ruby
+def attributes=(new_attributes)
+  return unless new_attributes.is_a?(Hash)
+
+  assign_attributes(new_attributes)
+end
+
+def assign_attributes(new_attributes, options = {})
+  # Other uninteresting code
+
+  unless options[:without_protection]
+    attributes = sanitize_for_mass_assignment(attributes,
+mass_assignment_role)
+  end
+  # other code
+end
+```
+
+Here's some examples from the rails documentation:
+
+```
+#   user = User.new
+#   user.assign_attributes({ :name => 'Josh', :is_admin => true }, :without_protection => true)
+#   user.name       # => "Josh"
+#   user.is_admin?  # => true
+```
+
+### Summary
+
+By studing how mass assignment works, we've learned how we can add
+attributes protection to any class, specify default attributes
+protection (useful if you're building an external library), and skip
+validation if you want to (admin panels anyone). You also learned that
+you can add role attributes for enhanced protection.
