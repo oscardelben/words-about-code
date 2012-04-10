@@ -1,9 +1,6 @@
 # Rails Internals: Mass Assignment Security
 
-**IMPORTANT** This article is still a draft. It is not completed and
-the information it contains may be wrong. Please be patient.
-
-Mass assigment security has recently been the focus of a debate in the
+Mass assigment security has recently been the focus of a strong debate in the
 Ruby community after a fellow hacker demostrated that lots of apps
 suffer from bad defaults when protecting model attributes.
 
@@ -18,9 +15,9 @@ end
 ```
 
 In this code we're protecting from a malicious assignment of the
-`role` attribute, but notice how we also expose `updated_at` which is
-probably not what we intended. Now, in the real world attributes will be
-generated automatically and so you'll be more vulnerable to these kind
+`role` attribute, but notice how we also expose `updated_at` to update_attributes which is
+probably not what we want to. Now, in the real world attributes will be
+generated dynamically by database columns and so you'll be more vulnerable to these kind
 of mistakes.
 
 ### attr_accessible
@@ -38,12 +35,14 @@ class User < ActiveRecord::Base
 end
 ```
 
+You also choose to specify a role (we'll see later how to use it).
+
 Match better. Now let's see how these methods are defined internally.
 
 ## ActiveModel::MassAssignmentSecurity
 
 We'll start our journey inside `ActiveModel::MassAssignmentSecurity`,
-which provides a general interfacer
+which provides a general interface which is also used by the more familiar ActiveRecord models
 
 ``` ruby
 def attr_protected(*args)
@@ -73,11 +72,14 @@ def attr_accessible(*args)
 end
 ```
 
+You can use these methods in *any* class by including the `ActiveModel::MassAssignmentSecurity` model.
+In fact, though not common, some people are using attr_accessible inside controllers for simplifying api protection.
+
 `attr_protected` and `attr_accessible` are very similar. They both
 accept an optional role[s] parameter for enhanced security.
 
-It's interesting to see how we can use `Array(elt)` to turn an element
-to an array, unless it's already an array:
+It's interesting to see how `Array(elt)` is used to turn an element
+into an array, unless it's an array already:
 
 ``` ruby
 A1.9.3p125 :001 > Array(:foo)
@@ -85,6 +87,8 @@ A1.9.3p125 :001 > Array(:foo)
 1.9.3p125 :002 > Array([:foo])
  => [:foo]
 ```
+
+The Ruby standard library provides lots of interesting methods that we don't use very often, and we'll learn about many of them in our Rails internals journey.  
 
 Let's move on:
 
@@ -118,14 +122,11 @@ end
 Here we see that we can use `mass_assignment_sanitizer=` to define our
 own sanitizer, but perhaps more interesting there's a method called
 `attributes_protected_by_default`, which is empty here, but you could
-overwrite it to return something else (useful in subclassess, I
-guess).
+overwrite it to return something else (useful in subclassess).
 
 I'll show you what a **sanitizer** looks like later. Now we'll introduce
-another concept, **authorizer**, which is either a `WhiteList`, or
-`Blacklist` class those responsibility is to tell wherever an attribute
-had to be denied, or not. Here's where we instantiate those classes:
-show
+another concept, **authorizer**, those responsibility is to tell if an attribute has to be denied or not.
+In the code below, `BlackList` and `WhiteList` are both used as *authorizers*:
 
 ``` ruby
 
@@ -158,7 +159,7 @@ end
 ```
 
 `sanitize_for_mass_assignment` is what you would usually call from your
-models, and it would just call your sanitizer of choice (default `logger`,
+models to sanitize your attributes. It calls your sanitizer of choice (default `logger`,
 but you can pass `strict` to raise an error instead), with your
 authorizer.
 
@@ -273,7 +274,7 @@ end
 ### How ActiveRecord Uses Mass Assignment to protect attributes
 
 ActiveRecord includes the Mass Assignment module to provide
-`attr_accessible` and `attr_protected` methods for your models.
+`attr_accessible` and `attr_protected` methods for your active record models.
 
 Beside that, it redefines `attributes_protected_by_default` to protect
 the primary_key and Inheritance_column from mass assignment:
@@ -288,7 +289,7 @@ end
 
 Also worth our attention is that the `attributes=` method of
 ActiveRecord calls `assign_attributes` which you could also call
-explicitly to skip mass assignment validation:
+explicitly to skip mass assignment validation if you wanted to:
 
 ``` ruby
 def attributes=(new_attributes)
@@ -308,11 +309,11 @@ mass_assignment_role)
 end
 ```
 
-Here's some examples from the rails documentation:
+Here's some examples from the rails documentation (I've added the role option):
 
 ```
 #   user = User.new
-#   user.assign_attributes({ :name => 'Josh', :is_admin => true }, :without_protection => true)
+#   user.assign_attributes({ :name => 'Josh', :is_admin => true }, :as => :admin :without_protection => true)
 #   user.name       # => "Josh"
 #   user.is_admin?  # => true
 ```
