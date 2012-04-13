@@ -313,7 +313,7 @@ Here's some examples from the rails documentation (I've added the role option):
 
 ```
 #   user = User.new
-#   user.assign_attributes({ :name => 'Josh', :is_admin => true }, :as => :admin :without_protection => true)
+#   user.assign_attributes({ :name => 'Josh', :is_admin => true }, :as => :admin, :without_protection => true)
 #   user.name       # => "Josh"
 #   user.is_admin?  # => true
 ```
