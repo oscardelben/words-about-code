@@ -208,7 +208,7 @@ this stuff works behind the scenes.
 
 How does ActiveRecord use observers to send notifications? Let's see.
 
-```
+``` ruby
 module ActiveRecord
   class Observer < ActiveModel::Observer
 
