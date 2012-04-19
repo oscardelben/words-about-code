@@ -37,7 +37,7 @@ end
 
 You also choose to specify a role (we'll see later how to use it).
 
-Match better. Now let's see how these methods are defined internally.
+Much better. Now let's see how these methods are defined internally.
 
 ## ActiveModel::MassAssignmentSecurity
 
