@@ -12,8 +12,7 @@ class User
   include ActiveModel::SecurePassword
   include ActiveModel::Validations
 
-  attr_accessor :password_digest # This would normally be a database
-column
+  attr_accessor :password_digest # This would normally be a database column
 
   has_secure_password
 end
