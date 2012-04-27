@@ -33,7 +33,7 @@ class Person
 
 end
 
-p =Person.new
+p = Person.new
 p.name = "Oscar"
 p.name_present? # true
 p.name_contains?("Os") # true
