@@ -12,6 +12,12 @@ I'm writing a rails internals series, here are all the posts so far:
 * [Rails Internals: Observers](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-internals-active-model-observers.md)
 * [Rails Internals: Secure Password](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-internals-secure-password.md)
 
+### Rails edge series
+
+Keep up with the latest changes in Rails edge:
+
+* [Rails Edge: Queue](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-edge-queue.md)
+
 ### Why Github?
 
 I want to think about words and code, not hosting, css or anything else
