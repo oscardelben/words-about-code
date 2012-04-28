@@ -1,7 +1,7 @@
 # Rails Edge: Queue
 
 Rails just added support for an unified api for Queue. The goal is to
-provide a common interface that extenal libraries can use without having to
+provide a common interface that external libraries can use without having to
 worry about implementation details.
 
 Here's how the public api looks so far:
