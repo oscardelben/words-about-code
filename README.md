@@ -16,6 +16,7 @@ I'm writing a rails internals series, here are all the posts so far:
 
 Keep up with the latest changes in Rails edge:
 
+* [Rails Edge: Multiple Route Files](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-edge-multiple-route-files.md)
 * [Rails Edge: Queue](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-edge-queue.md)
 
 ### Why Github?
