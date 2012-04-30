@@ -19,6 +19,10 @@ Keep up with the latest changes in Rails edge:
 * [Rails Edge: Multiple Route Files](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-edge-multiple-route-files.md)
 * [Rails Edge: Queue](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-edge-queue.md)
 
+### Random stuff
+
+* [The Business Tip DHH Gave Me Last Night](https://github.com/oscardelben/words-about-code/blob/master/2012/04/the-business-tip-dhh-gave-me-last-night.md)
+
 ### Why Github?
 
 I want to think about words and code, not hosting, css or anything else
