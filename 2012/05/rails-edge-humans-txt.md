@@ -1,6 +1,6 @@
-# New in Rails Edge: Humans TXT
+# Rails Edge: Humans.txt
 
-I'm not a big fun personally, but Rails 4 will automatically generate a
+I'm not a big fan personally, but Rails 4 will automatically generate a
 humans.txt file.
 
 [Github
