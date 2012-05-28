@@ -22,6 +22,7 @@ Keep up with the latest changes in Rails edge:
 
 ### Random stuff
 
+* [Ruby REPL](https://github.com/oscardelben/words-about-code/blob/master/2012/05/ruby-repl.md)
 * [The Business Tip DHH Gave Me Last Night](https://github.com/oscardelben/words-about-code/blob/master/2012/04/the-business-tip-dhh-gave-me-last-night.md)
 
 ### Why Github?
