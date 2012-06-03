@@ -20,6 +20,11 @@ Keep up with the latest changes in Rails edge:
 * [Rails Edge: Multiple Route Files](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-edge-multiple-route-files.md)
 * [Rails Edge: Queue](https://github.com/oscardelben/words-about-code/blob/master/2012/04/rails-edge-queue.md)
 
+### Ruby internals
+
+* [Ruby Internals: Exec](https://github.com/oscardelben/words-about-code/blob/master/2012/06/ruby-internals-exec.md)
+
+
 ### Random stuff
 
 * [Ruby REPL](https://github.com/oscardelben/words-about-code/blob/master/2012/05/ruby-repl.md)
