@@ -1,4 +1,4 @@
-# Ruby Internal: Method Definiton
+# Ruby Internals: Method Definition
 
 In this post I'm going to walk through what happens when you define a
 method in a class or Object in Ruby (1.9.3 in this case).
