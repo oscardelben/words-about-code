@@ -23,7 +23,8 @@ Keep up with the latest changes in Rails edge:
 ### Ruby internals
 
 * [Ruby Internals: Exec](https://github.com/oscardelben/words-about-code/blob/master/2012/06/ruby-internals-exec.md)
-
+* [Ruby Internals: Method
+* definition](https://github.com/oscardelben/words-about-code/blob/master/2012/07/ruby-internals-method-definition.md)
 
 ### Random stuff
 
