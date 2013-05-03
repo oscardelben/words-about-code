@@ -30,6 +30,8 @@ Keep up with the latest changes in Rails edge:
 
 * [Ruby REPL](https://github.com/oscardelben/words-about-code/blob/master/2012/05/ruby-repl.md)
 * [The Business Tip DHH Gave Me Last Night](https://github.com/oscardelben/words-about-code/blob/master/2012/04/the-business-tip-dhh-gave-me-last-night.md)
+* [Problems With Mysql UTF-8 Charset and Active Record](https://github.com/oscardelben/words-about-code/blob/master/2013/05/mysql-utf8-active-record.md)
+
 
 ### Why Github?
 
